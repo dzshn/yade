@@ -6,10 +6,9 @@ import textwrap
 import time
 import traceback
 
-import discord
 from discord.ext import commands
 
-from yade.util import clean_codeblock, codeblock
+from yade.util import clean_codeblock
 from yade.response import Response
 from yade.modules.base import Module
 
@@ -118,7 +117,7 @@ class Dev(Module):
             f'Loaded cogs ({len(cogs)}): ' + ', '.join(f'`{v.__module__}.{k}`' for k, v in cogs.items())
         )
 
-    @extensions.command(name='reload')
+    @extensions.command(name='reload', aliases=['rl', 'l'])
     async def reload_(self, ctx: commands.Context, *exts: str):
         status = []
         for ext in exts:
@@ -130,7 +129,7 @@ class Dev(Module):
                     status.append(f'+++ Loading   {ext}')
                     self.bot.load_extension(ext)
 
-            except commands.ExtensionNotFound:
+            except (ModuleNotFoundError, commands.ExtensionNotFound):
                 status.append('-   Not found!')
 
             except commands.NoEntryPointError:
