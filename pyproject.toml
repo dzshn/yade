@@ -15,6 +15,14 @@ toml = "^0.10.2"
 rope = "^0.20.1"
 flake8 = "^3.9.2"
 
+[tool.yapf]
+based_on_style = "google"
+column_limit = 110
+blank_line_before_nested_class_or_def = false
+dedent_closing_brackets = true
+split_before_dot = true
+coalesce_brackets = true
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
