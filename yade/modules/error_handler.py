@@ -11,6 +11,10 @@ from yade.modules.base import Module
 
 # 'JCatAIO123Thing' -> ['J', 'Cat', 'AIO', '123', 'Thing']
 RGX_CAMEL_CASE = re.compile(r'(?:[A-Z]|[0-9]+)(?:[a-z]+|[A-Z]*(?=[A-Z0-9]|$))')
+OWNER_BYPASSES = (
+    commands.PrivateMessageOnly, commands.NoPrivateMessage, commands.MissingPermissions, commands.MissingRole,
+    commands.MissingAnyRole, commands.DisabledCommand, commands.CommandOnCooldown
+)
 
 
 def parse_error(error: Exception) -> str:
@@ -74,7 +78,7 @@ class ErrorHandler(Module):
         if isinstance(error, commands.CommandNotFound):
             return
 
-        if isinstance(error, commands.CommandInvokeError):
+        elif isinstance(error, commands.CommandInvokeError):
             original: Exception = error.original
             if isinstance(original, discord.Forbidden):
                 return
@@ -100,5 +104,15 @@ class ErrorHandler(Module):
                 ).set_footer(text=f'Token: {token.hex()}')
             )
 
-        if isinstance(error, (commands.UserInputError, commands.CheckFailure)):
+        elif isinstance(error, OWNER_BYPASSES) and await self.bot.is_owner(ctx.author):
+            if hasattr(ctx, '_bypassed'):
+                return
+            await ctx.send(f'(bypassed `{error!r}`)')
+            ctx._bypassed = True  # Only used to not end in an infinite loop here
+            try:
+                await ctx.reinvoke(call_hooks=True)
+            except Exception as e:
+                await self.on_command_error(ctx, e)
+
+        elif isinstance(error, (commands.UserInputError, commands.CheckFailure)):
             await ctx.send(parse_error(error))
