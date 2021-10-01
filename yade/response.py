@@ -37,7 +37,8 @@ class Response:
             if value:
                 embed.add_field(
                     name=name.replace('_', ' ').strip().title(),
-                    value=codeblock(value, format_name=self._fmt)
+                    value=codeblock(value, format_name=self._fmt),
+                    inline=False
                 )
 
         return embed

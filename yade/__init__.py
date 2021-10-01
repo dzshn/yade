@@ -1,8 +1,9 @@
 from discord.ext import commands
 
 from yade.modules.dev import Dev
+from yade.modules.error_handler import ErrorHandler
 
-MODULES = [Dev]
+MODULES = [Dev, ErrorHandler]
 
 
 class Yade(*MODULES):
