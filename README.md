@@ -1,11 +1,22 @@
 # yade
-Yet another debug extension (for dpy)...
+Simple debug extension for d.py
 
 ## setup
+There's no released package as of now, but using the repo should work:
+* With [poetry](https://python-poetry.org/): `poetry add git+https://github.com/dzshn/yade#main`
+* With pip: `pip install git+https://github.com/dzshn/yade`
 
-#### via poetry
+## usage
 
-* Add this repo as a dep: `poetry add git+https://github.com/dzshn/yade`
-* something something `bot.load_extension('yade')`
+On whatever bot you have, add this to the main script (e.g. on `__main__.py`, `bot.py` etc):
 
-<!-- TODO: #### something else?? -->
+```python
+bot.load_extension('yade')
+```
+
+Alternatively, to run this extension only, you can use `python -m yade [BOT_TOKEN]`.
+
+
+## commands
+
+TBD...
