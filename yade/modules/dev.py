@@ -109,7 +109,7 @@ class Dev(Module):
             await ctx.invoke(self.list_)
 
     @extensions.command(name='list')
-    async def list_(self, ctx: commands.Context):
+    async def extensions_list(self, ctx: commands.Context):
         exts = self.bot.extensions
         cogs = self.bot.cogs
         await ctx.send(
@@ -118,7 +118,7 @@ class Dev(Module):
         )
 
     @extensions.command(name='reload', aliases=['rl', 'l'])
-    async def reload_(self, ctx: commands.Context, *exts: str):
+    async def extensions_reload(self, ctx: commands.Context, *exts: str):
         status = []
         for ext in exts:
             try:
