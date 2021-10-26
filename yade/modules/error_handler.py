@@ -6,14 +6,19 @@ import traceback
 import discord
 from discord.ext import commands
 
-from yade.response import Response
 from yade.modules.base import Module
+from yade.response import Response
 
 # 'JCatAIO123Thing' -> ['J', 'Cat', 'AIO', '123', 'Thing']
 RGX_CAMEL_CASE = re.compile(r'(?:[A-Z]|[0-9]+)(?:[a-z]+|[A-Z]*(?=[A-Z0-9]|$))')
 OWNER_BYPASSES = (
-    commands.PrivateMessageOnly, commands.NoPrivateMessage, commands.MissingPermissions, commands.MissingRole,
-    commands.MissingAnyRole, commands.DisabledCommand, commands.CommandOnCooldown
+    commands.PrivateMessageOnly,
+    commands.NoPrivateMessage,
+    commands.MissingPermissions,
+    commands.MissingRole,
+    commands.MissingAnyRole,
+    commands.DisabledCommand,
+    commands.CommandOnCooldown,
 )
 
 
@@ -22,7 +27,8 @@ def parse_error(error: Exception) -> str:
         ' '.join(
             w if i == 0 or w.isupper() else w.lower()
             for i, w in enumerate(RGX_CAMEL_CASE.findall(type(error).__name__))
-        ), error
+        ),
+        error,
     )
 
 
@@ -45,7 +51,7 @@ class ErrorHandler(Module):
         ctx, error = self._errors[token]
         response = Response(
             title=f'Data for error #{index}',
-            color=0xfa5070,
+            color=0xFA5070,
             traceback=''.join(traceback.format_exception_only(type(error), error)),
             context=(
                 f'content: {ctx.message.content}\n'
@@ -61,14 +67,16 @@ class ErrorHandler(Module):
                 f'invoked subcommand: {ctx.invoked_subcommand}\n'
                 f'subcommand passed: {ctx.subcommand_passed}\n'
                 f'in guild: {ctx.guild is not None}\n'
-                f'channel perms: {ctx.channel.permissions_for(ctx.me) if ctx.guild else "N/A"}\n'
-            )
+                f'channel perms: {ctx.channel.permissions_for(ctx.me) if ctx.guild else "N/A"}'
+            ),
         )
 
         await ctx.send(embed=response.embed, files=response.files)
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
+    async def on_command_error(
+        self, ctx: commands.Context, error: commands.CommandError
+    ):
         if ctx.command and ctx.command.has_error_handler():
             return
 
@@ -94,13 +102,14 @@ class ErrorHandler(Module):
 
             await ctx.send(
                 embed=discord.Embed(
-                    color=0xfa5050,
+                    color=0xFA5050,
                     title='Uncaught error!!',
                     description=(
                         'An uncaught error just occurred:\n'
                         f'\u200b \u200b {parse_error(original)}\n'
-                        f'This error has been stored, you can report it to {owner_mentions} with below token'
-                    )
+                        f'This error has been stored, you can report it to {owner_mentions} '
+                        'with below token'
+                    ),
                 ).set_footer(text=f'Token: {token.hex()}')
             )
 

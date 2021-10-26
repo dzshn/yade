@@ -14,7 +14,7 @@ class Response:
         error: bool = False,
         format_name: str = 'py',
         color: Optional[int] = None,
-        **kwargs: str
+        **kwargs: str,
     ):
         self._title = title
         self._desc = description
@@ -26,9 +26,13 @@ class Response:
     @property
     def embed(self) -> discord.Embed:
         if self._error:
-            embed = discord.Embed(color=self._color or 0xfa5050, title=f':x: {self._title}')
+            embed = discord.Embed(
+                color=self._color or 0xFA5050, title=f':x: {self._title}'
+            )
         else:
-            embed = discord.Embed(color=self._color or 0x50fa50, title=f':white_check_mark: {self._title}')
+            embed = discord.Embed(
+                color=self._color or 0x50FA50, title=f':white_check_mark: {self._title}'
+            )
 
         if self._desc:
             embed.description = self._desc
@@ -38,7 +42,7 @@ class Response:
                 embed.add_field(
                     name=name.replace('_', ' ').strip().title(),
                     value=codeblock(value, format_name=self._fmt),
-                    inline=False
+                    inline=False,
                 )
 
         return embed

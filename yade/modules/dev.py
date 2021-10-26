@@ -8,9 +8,9 @@ import traceback
 
 from discord.ext import commands
 
-from yade.util import clean_codeblock
-from yade.response import Response
 from yade.modules.base import Module
+from yade.response import Response
+from yade.util import clean_codeblock
 
 
 class Dev(Module):
@@ -41,7 +41,9 @@ class Dev(Module):
         try:
             exec_time = time.perf_counter()
             exec(code, env)
-            with contextlib.redirect_stdout(code_stdout), contextlib.redirect_stderr(code_stderr):
+            with contextlib.redirect_stdout(code_stdout), contextlib.redirect_stderr(
+                code_stderr
+            ):
                 code_return = await env['func']()
 
         except Exception:
@@ -52,7 +54,7 @@ class Dev(Module):
                 traceback=traceback.format_exc(-1),
                 return_=None,
                 stdout=code_stdout.getvalue(),
-                stderr=code_stderr.getvalue()
+                stderr=code_stderr.getvalue(),
             )
 
         else:
@@ -61,7 +63,7 @@ class Dev(Module):
                 description=f"{(time.perf_counter()-exec_time)*1000:g}ms :clock2:",
                 return_=pprint.pformat(code_return, compact=True, width=51),
                 stdout=code_stdout.getvalue(),
-                stderr=code_stderr.getvalue()
+                stderr=code_stderr.getvalue(),
             )
 
             if code_return is not None:
@@ -89,7 +91,7 @@ class Dev(Module):
                 title='Subprocess finished',
                 description=f'{(time.perf_counter()-exec_time)*1000:g}ms :clock2:',
                 stdout=stdout.decode(),
-                stderr=stderr.decode()
+                stderr=stderr.decode(),
             )
 
         else:
@@ -98,7 +100,7 @@ class Dev(Module):
                 error=True,
                 description=f'{(time.perf_counter()-exec_time)*1000:g}ms :clock2:',
                 stdout=stdout.decode(),
-                stderr=stderr.decode()
+                stderr=stderr.decode(),
             )
 
         await ctx.send(embed=response.embed, files=response.files)
@@ -113,8 +115,11 @@ class Dev(Module):
         exts = self.bot.extensions
         cogs = self.bot.cogs
         await ctx.send(
-            f'Loaded extensions ({len(exts)}): ' + ', '.join(f'`{i}`' for i in exts) + '\n' +
-            f'Loaded cogs ({len(cogs)}): ' + ', '.join(f'`{v.__module__}.{k}`' for k, v in cogs.items())
+            f'Loaded extensions ({len(exts)}): '
+            + ', '.join(f'`{i}`' for i in exts)
+            + '\n'
+            + f'Loaded cogs ({len(cogs)}): '
+            + ', '.join(f'`{v.__module__}.{k}`' for k, v in cogs.items())
         )
 
     @extensions.command(name='reload', aliases=['rl', 'l'])

@@ -1,7 +1,9 @@
 from typing import Optional
 
 
-def codeblock(content: str, max_size: int = 1024, format_name: Optional[str] = 'py') -> str:
+def codeblock(
+    content: str, max_size: int = 1024, format_name: Optional[str] = 'py'
+) -> str:
     if format_name:
         max_size -= 8 + len(format_name)
         md_format = '```{}\n{}\n```'
@@ -10,7 +12,7 @@ def codeblock(content: str, max_size: int = 1024, format_name: Optional[str] = '
         md_format = '```{1}```'
 
     if len(content) > max_size:
-        content = content[:max_size - 1] + '…'
+        content = content[: max_size - 1] + '…'
 
     return md_format.format(format_name, content)
 
