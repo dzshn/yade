@@ -2,6 +2,7 @@ import asyncio
 import contextlib
 import io
 import pprint
+import sys
 import textwrap
 import time
 import traceback
@@ -30,13 +31,20 @@ class Dev(Module):
         code_stdout = io.StringIO()
         code_stderr = io.StringIO()
 
-        env = {
+        modules = {k: v for k, v in sys.modules.items() if '.' not in k}
+        cogs = self.bot.cogs
+        shorthands = {
             '_': self._last_eval_value,
-            'b': self.bot,
-            'ctx': ctx,
             'author': ctx.author,
+            'b': self.bot,
+            'channel': ctx.channel,
+            'ctx': ctx,
+            'guild': ctx.guild,
+            'message': ctx.message,
             'msg': ctx.message,
         }
+
+        env = modules | cogs | shorthands
 
         try:
             exec_time = time.perf_counter()
