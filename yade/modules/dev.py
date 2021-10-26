@@ -108,7 +108,7 @@ class Dev(Module):
     @commands.group(aliases=['ext', 'exts'])
     async def extensions(self, ctx: commands.Context):
         if ctx.subcommand_passed is None:
-            await ctx.invoke(self.list_)
+            await ctx.invoke(self.extensions_list)
 
     @extensions.command(name='list')
     async def extensions_list(self, ctx: commands.Context):
