@@ -36,19 +36,19 @@ ErrorData = collections.namedtuple('ErrorData', 'ctx error')
 
 
 class ErrorHandler(Module):
-    def __init__(self, *_, **__):
-        self._errors: dict[bytes, ErrorData] = {}
-        super().__init__(*_, **__)
+    def __init__(self, *args, **kwargs):
+        self.__errors: dict[bytes, ErrorData] = {}
+        super().__init__(*args, **kwargs)
 
     @commands.command()
     async def geterror(self, ctx: commands.Context, token: str):
         token = bytes.fromhex(token)
-        if token not in self._errors:
+        if token not in self.__errors:
             await ctx.send('No such token')
             return
 
-        index = list(self._errors.keys()).index(token)
-        ctx, error = self._errors[token]
+        index = list(self.__errors.keys()).index(token)
+        ctx, error = self.__errors[token]
         response = Response(
             title=f'Data for error #{index}',
             color=0xFA5070,
@@ -93,7 +93,7 @@ class ErrorHandler(Module):
 
             # This is very likely to break with 1.3 trillion errors.
             token = secrets.token_bytes(10)
-            self._errors[token] = ErrorData(ctx=ctx, error=error)
+            self.__errors[token] = ErrorData(ctx=ctx, error=error)
 
             if self.bot.owner_ids:
                 owner_mentions = ', '.join(f'<@{i}>' for i in self.bot.owner_ids)

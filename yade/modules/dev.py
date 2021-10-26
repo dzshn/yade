@@ -15,9 +15,9 @@ from yade.util import clean_codeblock
 
 
 class Dev(Module):
-    def __init__(self, *_, **__):
-        self._last_eval_value = None
-        super().__init__(*_, **__)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__last_eval_value = None
 
     @commands.command(name='eval', aliases=['.'])
     async def eval_(self, ctx: commands.Context, *, code: str):
@@ -34,7 +34,7 @@ class Dev(Module):
         modules = {k: v for k, v in sys.modules.items() if '.' not in k}
         cogs = self.bot.cogs
         shorthands = {
-            '_': self._last_eval_value,
+            '_': self.__last_eval_value,
             'author': ctx.author,
             'b': self.bot,
             'channel': ctx.channel,
@@ -75,7 +75,7 @@ class Dev(Module):
             )
 
             if code_return is not None:
-                self._last_eval_value = code_return
+                self.__last_eval_value = code_return
 
         await ctx.send(embed=response.embed, files=response.files)
 
