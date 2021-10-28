@@ -7,7 +7,6 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-"discord.py" = {git = "https://github.com/Rapptz/discord.py"}
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
